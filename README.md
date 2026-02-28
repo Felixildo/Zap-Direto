@@ -1,6 +1,6 @@
-# 🚀 Zap Direto Pro - Multi-Acesso
+# 🚀 Zap Direto - Multi-Acesso
 
-O **Zap Direto Pro** é um Web App leve e eficiente desenvolvido para facilitar o início de conversas no WhatsApp sem a necessidade de salvar o número de telefone na agenda do celular ou do computador. Ideal para vendedores, suporte e uso pessoal.
+O **Zap Direto** é um Web App leve e eficiente desenvolvido para facilitar o início de conversas no WhatsApp sem a necessidade de salvar o número de telefone na agenda do celular ou do computador. Ideal para vendedores, suporte e uso pessoal.
 
 ## ✨ Funcionalidades
 
@@ -37,6 +37,21 @@ Sua privacidade é prioridade. Este Web App:
 ## ⚖️ Licença
 
 Este projeto está sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## ⚠️ Avisos Importantes
+
+### 1. Limitações
+* **Dependência de Terceiros:** Este app funciona como um facilitador de links. O funcionamento final depende exclusivamente da disponibilidade e das APIs oficiais do WhatsApp (Meta).
+* **Armazenamento:** O histórico é local. Limpar os dados do navegador ou trocar de dispositivo fará com que as informações recentes sejam perdidas, pois não utilizamos banco de dados em nuvem.
+* **Bloqueios:** O uso excessivo de mensagens para números desconhecidos pode ser interpretado pelo WhatsApp como SPAM. Utilize a ferramenta com responsabilidade.
+
+### 2. Responsabilidade
+* **Uso de Dados:** O desenvolvedor não tem acesso aos números ou mensagens digitados. Todos os dados permanecem no dispositivo do usuário.
+* **Ações do Usuário:** O usuário é o único responsável pelo conteúdo enviado e pelas consequências de suas interações via WhatsApp.
+
+### 3. Garantia
+* **"Como está":** Este software é fornecido "no estado em que se encontra", sem garantias de qualquer tipo, expressas ou implícitas, incluindo garantias de funcionamento ininterrupto.
+* **Suporte:** Por ser uma ferramenta gratuita e de código aberto, não há garantia de suporte técnico imediato ou atualizações vitalícias.
 
 ---
 Desenvolvido para agilizar o seu dia a dia. ⚡
