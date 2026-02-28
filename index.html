@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zap Direto Pro</title>
+    <title>Zap Direto</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -53,6 +53,7 @@
             background: #fafafa;
         }
 
+        select { max-width: 130px; }
         select:focus, input:focus, textarea:focus { border-color: var(--whatsapp-green); background: #fff; }
         
         input, textarea { width: 100%; box-sizing: border-box; }
@@ -129,16 +130,72 @@
 <body>
 
 <div class="card">
-    <h2>Zap Direto Pro</h2>
+    <h2>Zap Direto</h2>
     
-    <label>Telefone</label>
+    <label>País e Telefone</label>
     <div class="input-group">
         <select id="countryCode">
-            <option value="55" selected>🇧🇷 +55</option>
-            <option value="1">🇺🇸 +1</option>
-            <option value="351">🇵🇹 +351</option>
-            <option value="34">🇪🇸 +34</option>
-            <option value="44">🇬🇧 +44</option>
+            <optgroup label="Mais Usados">
+                <option value="55" selected>🇧🇷 BR (+55)</option>
+                <option value="1">🇺🇸 USA (+1)</option>
+                <option value="351">🇵🇹 PT (+351)</option>
+            </optgroup>
+            <optgroup label="Todos os Países">
+                <option value="93">🇦🇫 Afeganistão (+93)</option>
+                <option value="355">🇦🇱 Albânia (+355)</option>
+                <option value="49">🇩🇪 Alemanha (+49)</option>
+                <option value="376">🇦🇩 Andorra (+376)</option>
+                <option value="244">🇦🇴 Angola (+244)</option>
+                <option value="54">🇦🇷 Argentina (+54)</option>
+                <option value="61">🇦🇺 Austrália (+61)</option>
+                <option value="43">🇦🇹 Áustria (+43)</option>
+                <option value="32">🇧🇪 Bélgica (+32)</option>
+                <option value="591">🇧🇴 Bolívia (+591)</option>
+                <option value="238">🇨🇻 Cabo Verde (+238)</option>
+                <option value="56">🇨🇱 Chile (+56)</option>
+                <option value="86">🇨🇳 China (+86)</option>
+                <option value="57">🇨🇴 Colômbia (+57)</option>
+                <option value="82">🇰🇷 Coreia do Sul (+82)</option>
+                <option value="506">🇨🇷 Costa Rica (+506)</option>
+                <option value="53">🇨🇺 Cuba (+53)</option>
+                <option value="45">🇩🇰 Dinamarca (+45)</option>
+                <option value="20">🇪🇬 Egito (+20)</option>
+                <option value="971">🇦🇪 Emirados Árabes (+971)</option>
+                <option value="593">🇪🇨 Equador (+593)</option>
+                <option value="34">🇪🇸 Espanha (+34)</option>
+                <option value="33">🇫🇷 França (+33)</option>
+                <option value="30">🇬🇷 Grécia (+30)</option>
+                <option value="502">🇬🇹 Guatemala (+502)</option>
+                <option value="245">🇬🇼 Guiné-Bissau (+245)</option>
+                <option value="504">🇭🇳 Honduras (+504)</option>
+                <option value="91">🇮🇳 Índia (+91)</option>
+                <option value="62">🇮🇩 Indonésia (+62)</option>
+                <option value="964">🇮🇶 Iraque (+964)</option>
+                <option value="353">🇮🇪 Irlanda (+353)</option>
+                <option value="972">🇮🇱 Israel (+972)</option>
+                <option value="39">🇮🇹 Itália (+39)</option>
+                <option value="81">🇯🇵 Japão (+81)</option>
+                <option value="352">🇱🇺 Luxemburgo (+352)</option>
+                <option value="212">🇲🇦 Marrocos (+212)</option>
+                <option value="52">🇲🇽 México (+52)</option>
+                <option value="258">🇲🇿 Moçambique (+258)</option>
+                <option value="47">🇳🇴 Noruega (+47)</option>
+                <option value="64">🇳🇿 Nova Zelândia (+64)</option>
+                <option value="595">🇵🇾 Paraguai (+595)</option>
+                <option value="51">🇵🇪 Peru (+51)</option>
+                <option value="48">🇵🇱 Polônia (+48)</option>
+                <option value="44">🇬🇧 Reino Unido (+44)</option>
+                <option value="7">🇷🇺 Rússia (+7)</option>
+                <option value="239">🇸🇹 São Tomé e Príncipe (+239)</option>
+                <option value="27">🇿🇦 África do Sul (+27)</option>
+                <option value="46">🇸🇪 Suécia (+46)</option>
+                <option value="41">🇨🇭 Suíça (+41)</option>
+                <option value="66">🇹🇭 Tailândia (+66)</option>
+                <option value="670">🇹🇱 Timor-Leste (+670)</option>
+                <option value="90">🇹🇷 Turquia (+90)</option>
+                <option value="598">🇺🇾 Uruguai (+598)</option>
+                <option value="58">🇻🇪 Venezuela (+58)</option>
+            </optgroup>
         </select>
         <input type="tel" id="phoneNumber" placeholder="(00) 00000-0000" autofocus>
     </div>
@@ -170,7 +227,6 @@
     const historyList = document.getElementById('historyList');
     let selectedMode = 'mobile';
 
-    // Seletor de modo
     document.querySelectorAll('.mode-option').forEach(opt => {
         opt.onclick = function() {
             document.querySelectorAll('.mode-option').forEach(o => o.classList.remove('active'));
@@ -179,7 +235,6 @@
         };
     });
 
-    // Máscara de Telefone (Brasil)
     phoneInput.addEventListener('input', (e) => {
         if (document.getElementById('countryCode').value === "55") {
             let v = e.target.value.replace(/\D/g, '');
@@ -202,27 +257,21 @@
         }
 
         let url = "";
-        
-        // Lógica de Redirecionamento Corrigida
         if (selectedMode === 'mobile') {
             url = `https://api.whatsapp.com/send?phone=${fullNumber}${msg ? '&text=' + msg : ''}`;
         } else if (selectedMode === 'desktop') {
-            // Usa o protocolo direto para o App Desktop
             url = `whatsapp://send?phone=${fullNumber}${msg ? '&text=' + msg : ''}`;
         } else {
-            // URL específica do WhatsApp Web
             url = `https://web.whatsapp.com/send?phone=${fullNumber}${msg ? '&text=' + msg : ''}`;
         }
 
         saveToHistory(fullNumber);
 
-        // Abre em nova aba. Se falhar por bloqueio, abre na mesma aba.
         const win = window.open(url, '_blank');
         if (!win || win.closed || typeof win.closed == 'undefined') {
             window.location.href = url;
         }
 
-        // Limpeza dos campos após envio
         setTimeout(() => {
             phoneInput.value = "";
             messageInput.value = "";
