@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zap Direto - Multi-Acesso</title>
+    <title>Zap Direto Pro</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -58,7 +58,6 @@
         input, textarea { width: 100%; box-sizing: border-box; }
         textarea { resize: none; height: 70px; font-family: inherit; }
 
-        /* Seletor de Destino */
         .mode-selector { 
             display: grid; 
             grid-template-columns: 1fr 1fr 1fr; 
@@ -104,10 +103,8 @@
         .main-btn:hover { background-color: var(--dark-green); }
         .main-btn:active { transform: scale(0.98); }
         
-        /* Histórico */
         .history-container { border-top: 1px solid #eee; margin-top: 25px; padding-top: 15px; }
         .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .history-header label { margin: 0; }
         
         .history-list { list-style: none; padding: 0; margin: 0; max-height: 160px; overflow-y: auto; }
         
@@ -124,20 +121,15 @@
         }
 
         .history-item:hover { background: #f0fdf4; }
-        
         .history-info strong { color: #444; }
         .history-date { font-size: 0.7rem; color: #bbb; display: block; }
-        
         .clear-btn { font-size: 0.7rem; color: #d93025; cursor: pointer; border: none; background: none; font-weight: bold; }
-        
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Zap Direto</h2>
+    <h2>Zap Direto Pro</h2>
     
     <label>Telefone</label>
     <div class="input-group">
@@ -166,3 +158,124 @@
     <div class="history-container">
         <div class="history-header">
             <label>Contatos Recentes</label>
+            <button class="clear-btn" onclick="clearHistory()">LIMPAR TUDO</button>
+        </div>
+        <ul id="historyList" class="history-list"></ul>
+    </div>
+</div>
+
+<script>
+    const phoneInput = document.getElementById('phoneNumber');
+    const messageInput = document.getElementById('message');
+    const historyList = document.getElementById('historyList');
+    let selectedMode = 'mobile';
+
+    // Seletor de modo
+    document.querySelectorAll('.mode-option').forEach(opt => {
+        opt.onclick = function() {
+            document.querySelectorAll('.mode-option').forEach(o => o.classList.remove('active'));
+            this.classList.add('active');
+            selectedMode = this.getAttribute('data-mode');
+        };
+    });
+
+    // Máscara de Telefone (Brasil)
+    phoneInput.addEventListener('input', (e) => {
+        if (document.getElementById('countryCode').value === "55") {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.substring(0, 11);
+            if (v.length > 2) v = '(' + v.substring(0,2) + ') ' + v.substring(2);
+            if (v.length > 9) v = v.substring(0,10) + '-' + v.substring(10);
+            e.target.value = v;
+        }
+    });
+
+    function startChat() {
+        const country = document.getElementById('countryCode').value;
+        const phone = phoneInput.value.replace(/\D/g, '');
+        const msg = encodeURIComponent(messageInput.value.trim());
+        const fullNumber = country + phone;
+
+        if (phone.length < 8) { 
+            alert("⚠️ Por favor, insira um número válido."); 
+            return; 
+        }
+
+        let url = "";
+        
+        // Lógica de Redirecionamento Corrigida
+        if (selectedMode === 'mobile') {
+            url = `https://api.whatsapp.com/send?phone=${fullNumber}${msg ? '&text=' + msg : ''}`;
+        } else if (selectedMode === 'desktop') {
+            // Usa o protocolo direto para o App Desktop
+            url = `whatsapp://send?phone=${fullNumber}${msg ? '&text=' + msg : ''}`;
+        } else {
+            // URL específica do WhatsApp Web
+            url = `https://web.whatsapp.com/send?phone=${fullNumber}${msg ? '&text=' + msg : ''}`;
+        }
+
+        saveToHistory(fullNumber);
+
+        // Abre em nova aba. Se falhar por bloqueio, abre na mesma aba.
+        const win = window.open(url, '_blank');
+        if (!win || win.closed || typeof win.closed == 'undefined') {
+            window.location.href = url;
+        }
+
+        // Limpeza dos campos após envio
+        setTimeout(() => {
+            phoneInput.value = "";
+            messageInput.value = "";
+            renderHistory();
+            phoneInput.focus();
+        }, 1000);
+    }
+
+    function saveToHistory(num) {
+        let history = JSON.parse(localStorage.getItem('zapHistoryStorage') || '[]');
+        const entry = { 
+            number: num, 
+            date: new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) 
+        };
+        history = [entry, ...history.filter(h => h.number !== num)].slice(0, 10);
+        localStorage.setItem('zapHistoryStorage', JSON.stringify(history));
+    }
+
+    function renderHistory() {
+        const history = JSON.parse(localStorage.getItem('zapHistoryStorage') || '[]');
+        historyList.innerHTML = history.length ? '' : '<li style="color:#ccc; text-align:center; font-size:0.8rem; padding:10px;">Nenhum número recente.</li>';
+        
+        history.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'history-item';
+            li.innerHTML = `
+                <div class="history-info">
+                    <strong>+${item.number}</strong>
+                    <span class="history-date">${item.date}</span>
+                </div>
+                <span style="color: var(--whatsapp-green); font-size: 1.2rem;">➔</span>
+            `;
+            li.onclick = () => {
+                if (item.number.startsWith('55')) {
+                    document.getElementById('countryCode').value = '55';
+                    phoneInput.value = item.number.substring(2);
+                    phoneInput.dispatchEvent(new Event('input'));
+                } else {
+                    phoneInput.value = item.number;
+                }
+            };
+            historyList.appendChild(li);
+        });
+    }
+
+    function clearHistory() {
+        if(confirm("Deseja apagar o histórico?")) {
+            localStorage.removeItem('zapHistoryStorage');
+            renderHistory();
+        }
+    }
+
+    window.onload = renderHistory;
+</script>
+</body>
+</html>
