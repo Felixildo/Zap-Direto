@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zap Direto - Multi-Acesso</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#25D366">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/124/124034.png">
+
+    <style>
+        :root { 
+            --whatsapp-green: #25D366; 
+            --dark-green: #128C7E; 
+            --bg-color: #f0f2f5; 
+            --text-main: #333;
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background-color: var(--bg-color); 
+            display: flex; 
+            justify-content: center; 
+            padding: 20px; 
+            margin: 0; 
+            color: var(--text-main);
+        }
+
+        .card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 420px; 
+        }
+
+        h2 { color: var(--dark-green); text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; }
+        
+        label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 0.85rem; }
+        
+        .input-group { display: flex; gap: 8px; }
+        
+        select, input, textarea { 
+            padding: 12px; 
+            border: 2px solid #eee; 
+            border-radius: 12px; 
+            font-size: 1rem; 
+            outline: none; 
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        select:focus, input:focus, textarea:focus { border-color: var(--whatsapp-green); background: #fff; }
+        
+        input, textarea { width: 100%; box-sizing: border-box; }
+        textarea { resize: none; height: 70px; font-family: inherit; }
+
+        /* Seletor de Destino */
+        .mode-selector { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 8px; 
+            margin-top: 10px; 
+        }
+
+        .mode-option { 
+            font-size: 0.7rem; 
+            border: 2px solid #eee; 
+            border-radius: 10px; 
+            padding: 10px 5px; 
+            text-align: center; 
+            cursor: pointer; 
+            font-weight: bold; 
+            color: #888;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mode-option.active { 
+            border-color: var(--whatsapp-green); 
+            background: #e8f9ee; 
+            color: var(--dark-green); 
+        }
+
+        .main-btn { 
+            width: 100%; 
+            padding: 16px; 
+            background-color: var(--whatsapp-green); 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 25px; 
+            transition: transform 0.1s, background 0.3s;
+        }
+
+        .main-btn:hover { background-color: var(--dark-green); }
+        .main-btn:active { transform: scale(0.98); }
+        
+        /* Histórico */
+        .history-container { border-top: 1px solid #eee; margin-top: 25px; padding-top: 15px; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .history-header label { margin: 0; }
+        
+        .history-list { list-style: none; padding: 0; margin: 0; max-height: 160px; overflow-y: auto; }
+        
+        .history-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 12px; 
+            border-bottom: 1px solid #f8f8f8; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .history-item:hover { background: #f0fdf4; }
+        
+        .history-info strong { color: #444; }
+        .history-date { font-size: 0.7rem; color: #bbb; display: block; }
+        
+        .clear-btn { font-size: 0.7rem; color: #d93025; cursor: pointer; border: none; background: none; font-weight: bold; }
+        
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Zap Direto</h2>
+    
+    <label>Telefone</label>
+    <div class="input-group">
+        <select id="countryCode">
+            <option value="55" selected>🇧🇷 +55</option>
+            <option value="1">🇺🇸 +1</option>
+            <option value="351">🇵🇹 +351</option>
+            <option value="34">🇪🇸 +34</option>
+            <option value="44">🇬🇧 +44</option>
+        </select>
+        <input type="tel" id="phoneNumber" placeholder="(00) 00000-0000" autofocus>
+    </div>
+
+    <label>Mensagem (Opcional)</label>
+    <textarea id="message" placeholder="Escreva sua mensagem..."></textarea>
+
+    <label>Abrir onde?</label>
+    <div class="mode-selector" id="modeSelector">
+        <div class="mode-option active" data-mode="mobile"><span>📱</span>App Celular</div>
+        <div class="mode-option" data-mode="desktop"><span>💻</span>App PC</div>
+        <div class="mode-option" data-mode="web"><span>🌐</span>WhatsApp Web</div>
+    </div>
+
+    <button class="main-btn" onclick="startChat()">🚀 Iniciar Conversa</button>
+
+    <div class="history-container">
+        <div class="history-header">
+            <label>Contatos Recentes</label>
